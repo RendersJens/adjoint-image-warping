@@ -14,6 +14,6 @@ Running the notebooks
 To run the notebooks you need to install sage from https://www.sagemath.org/.
 Then run
 
-`$sage -n jupyter`
+`$ sage -n jupyter`
 
 from a terminal and select the notebooks from the UI.
