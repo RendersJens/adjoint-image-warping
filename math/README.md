@@ -7,7 +7,7 @@ which are imported by the respective cuda kernels. Just for reference, the same 
 
 Viewing the notebooks
 =====================
-The notebooks can be viewed right here on GitHub: https://github.com/RendersJens/adjoint-image-warping/math/
+The notebooks can be viewed right here on GitHub: https://github.com/RendersJens/adjoint-image-warping/tree/main/math
 
 Running the notebooks
 =====================
