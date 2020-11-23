@@ -1,0 +1,5 @@
+wrapper.cpp
+build
+dist/
+adjoint_image_warping.egg-info/
+*.pyc

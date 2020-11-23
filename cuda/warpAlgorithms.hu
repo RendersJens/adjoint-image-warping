@@ -1,0 +1,38 @@
+void backwardWarp2D(const float* f,
+                    const float* u,
+                    const float* v,
+                    float* fWarped,
+                    int degree,
+                    int width,
+                    int height);
+
+
+void backwardWarp3D(const float* f,
+                    const float* u,
+                    const float* v,
+                    const float* w,
+                    float* fWarped,
+                    int degree,
+                    int width,
+                    int height,
+                    int depth);
+
+
+void adjointBackwardWarp2D(const float* fWarped,
+                           const float* u,
+                           const float* v,
+                           float* f,
+                           int degree,
+                           int width,
+                           int height);
+
+
+void adjointBackwardWarp3D(const float* fWarped,
+                           const float* u,
+                           const float* v,
+                           const float* w,
+                           float* f,
+                           int degree,
+                           int width,
+                           int height,
+                           int depth);
