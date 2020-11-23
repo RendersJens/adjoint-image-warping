@@ -1,4 +1,4 @@
-# adjoint-image-warping
+# Adjoint Image Warping
 GPU accelerated image warping and adjoint image warping algorithms. Written in CUDA C for use in python with the provided wrappers.
 
 Installation

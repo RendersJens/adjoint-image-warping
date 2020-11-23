@@ -12,4 +12,8 @@ The notebooks can be viewed right here on GitHub: https://github.com/RendersJens
 Running the notebooks
 =====================
 To run the notebooks you need to install sage from https://www.sagemath.org/.
-Then run `sage -n jupyter` from a terminal and select the notebooks from the UI.
+Then run
+
+`$ sage -n jupyter`
+
+from a terminal and select the notebooks from the UI.
