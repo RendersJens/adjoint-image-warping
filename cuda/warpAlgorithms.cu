@@ -3,6 +3,8 @@
 #include <warpKernels.cu>
 #include <warpAlgorithms.hu>
 
+// this small wrapper around each cuda call makes a print
+// if the call failed
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
 {
@@ -20,6 +22,17 @@ void backwardWarp2D(const float* f,
                     int degree,
                     int width,
                     int height){
+    /*
+    GPU implementation of 2D backward image warping.
+
+    f: the image being warped
+    u: the x component of the displacement vectors
+    v: the y component of the displacement vectors
+    fWarped: the warped image wil be written in this array
+    degree: degree of the spline interpolation (1 or 3)
+    width: width of the image
+    height: height of the image
+    */
 
     size_t size = width*height * sizeof(float);
 
@@ -90,6 +103,19 @@ void backwardWarp3D(const float* f,
                     int width,
                     int height,
                     int depth){
+    /*
+    GPU implementation of 3D backward image warping.
+
+    f: the image being warped
+    u: the x component of the displacement vectors
+    v: the y component of the displacement vectors
+    w: the z component of the displacement vectors
+    fWarped: the warped image wil be written in this array
+    degree: degree of the spline interpolation (1 or 3)
+    width: width of the image
+    height: height of the image
+    depth: depth of the image
+    */
 
     size_t size = width*height*depth * sizeof(float);
 
@@ -167,8 +193,15 @@ void adjointBackwardWarp2D(const float* fWarped,
                            int height){
 
     /*
-    GPU implementation of 2D adjoint backward image warping along the DVF (u,v)
-    with rectangular multivariate spline interpolation
+    GPU implementation of the adjoint of 2D backward image warping.
+
+    fWarped: the image being adjoint warped
+    u: the x component of the displacement vectors
+    v: the y component of the displacement vectors
+    f: the adjoint warped image wil be written in this array
+    degree: degree of the spline interpolation (1 or 3)
+    width: width of the image
+    height: height of the image
     */
 
 
@@ -242,8 +275,17 @@ void adjointBackwardWarp3D(const float* fWarped,
                            int height,
                            int depth){
     /*
-    GPU implementation of 3D adjoint backward image warping along the DVF (u,v,w)
-    with rectangular multivariate spline interpolation
+    GPU implementation of 3D backward image warping.
+
+    fWarped: the image being adjoint warped
+    u: the x component of the displacement vectors
+    v: the y component of the displacement vectors
+    w: the z component of the displacement vectors
+    f: the adjoint warped image wil be written in this array
+    degree: degree of the spline interpolation (1 or 3)
+    width: width of the image
+    height: height of the image
+    depth: depth of the image
     */
 
     size_t size = width*height*depth * sizeof(float);

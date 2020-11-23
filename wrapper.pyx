@@ -183,7 +183,7 @@ cdef extern from "cuda/warpAlgorithmsAffine.hu":
                                      int depth)
 
 
-# python version of backwardWarp2D, this function accepts numpy arrays
+# python version of affineBackwardWarp2D, this function accepts numpy arrays
 def affine_backward_warp_2D(np.ndarray[ndim=2, dtype=float, mode="c"] f,
                             np.ndarray[ndim=2, dtype=float, mode="c"] A,
                             np.ndarray[ndim=1, dtype=float, mode="c"] b,
@@ -208,7 +208,7 @@ def affine_backward_warp_2D(np.ndarray[ndim=2, dtype=float, mode="c"] f,
     return f_warped
 
 
-# python version of backwardWarp3D, this function accepts numpy arrays
+# python version of affineBackwardWarp3D, this function accepts numpy arrays
 def affine_backward_warp_3D(np.ndarray[ndim=3, dtype=float, mode="c"] f,
                             np.ndarray[ndim=2, dtype=float, mode="c"] A,
                             np.ndarray[ndim=1, dtype=float, mode="c"] b,
@@ -241,7 +241,7 @@ def affine_backward_warp_3D(np.ndarray[ndim=3, dtype=float, mode="c"] f,
     return f_warped
 
 
-# python version of adjointBackwardWarp2D, this function accepts numpy arrays
+# python version of adjointAffineBackwardWarp2D, this function accepts numpy arrays
 def adjoint_affine_backward_warp_2D(np.ndarray[ndim=2, dtype=float, mode="c"] f_warped,
                                     np.ndarray[ndim=2, dtype=float, mode="c"] A,
                                     np.ndarray[ndim=1, dtype=float, mode="c"] b,
@@ -271,7 +271,7 @@ def adjoint_affine_backward_warp_2D(np.ndarray[ndim=2, dtype=float, mode="c"] f_
     return f
 
 
-# python version of adjointBackwardWarp3D, this function accepts numpy arrays
+# python version of adjointAffineBackwardWarp3D, this function accepts numpy arrays
 def adjoint_affine_backward_warp_3D(np.ndarray[ndim=3, dtype=float, mode="c"] f_warped,
                                     np.ndarray[ndim=2, dtype=float, mode="c"] A,
                                     np.ndarray[ndim=1, dtype=float, mode="c"] b,

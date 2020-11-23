@@ -6,7 +6,7 @@ __global__ void affineLinearBackwardWarp2DKernel(const float* f,
                                                  int height){
     
     /*
-    Kernel of GPU implementation of 2D backward image warping along the DVF (u,v)
+    Kernel of GPU implementation of affine 2D backward image warping along the DVF (u,v)
     with linear interpolation (rectangular multivariate spline)
     */
 
@@ -53,7 +53,7 @@ __global__ void adjointAffineLinearBackwardWarp2DKernel(const float* fWarped,
                                                         int height){
 
     /*
-    Kernel of GPU implementation of 2D adjoint backward image warping along the
+    Kernel of GPU implementation of affine 2D adjoint backward image warping along the
     DVF (u,v) with linear interpolation (rectangular multivariate spline)
     */
 
@@ -101,7 +101,7 @@ __global__ void affineLinearBackwardWarp3DKernel(const float* f,
                                                  int depth){
     
     /*
-    Kernel of GPU implementation of 3D backward image warping along the DVF (u,v)
+    Kernel of GPU implementation of affine 3D backward image warping along the DVF (u,v,w)
     with linear interpolation (rectangular multivariate spline)
     */
 
@@ -162,8 +162,8 @@ __global__ void adjointAffineLinearBackwardWarp3DKernel(const float* fWarped,
                                                         int depth){
     
     /*
-    Kernel of GPU implementation of 3D adjoint backward image warping along the
-    DVF (u,v) with linear interpolation (rectangular multivariate spline)
+    Kernel of GPU implementation of affine 3D adjoint backward image warping along the
+    DVF (u,v,w) with linear interpolation (rectangular multivariate spline)
     */
 
     int h = blockIdx.z * blockDim.z + threadIdx.z;
@@ -221,7 +221,11 @@ __global__ void affineCubicBackwardWarp2DKernel(const float* f,
                                                 int width,
                                                 int height,
                                                 const float* coeffs){
-
+    /*
+    Kernel of GPU implementation of affine 2D backward image warping along the DVF (u,v)
+    with cubic interpolation. The cubic polynomials used are passed by the
+    coeffs parameter. The are computed externally with sage.
+    */
 
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
@@ -275,8 +279,9 @@ __global__ void adjointAffineCubicBackwardWarp2DKernel(const float* fWarped,
                                                        const float* coeffs){
 
     /*
-    Kernel of GPU implementation of adjoint backward image warping along the
-    DVF (u,v) with cubic interpolation (rectangular multivariate catmull-rom spline)
+    Kernel of GPU implementation of affine 2D adjoint backward image warping along the DVF (u,v)
+    with cubic interpolation. The cubic polynomials used are passed by the
+    coeffs parameter. The are computed externally with sage.
     */
 
     int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -332,8 +337,9 @@ __global__ void affineCubicBackwardWarp3DKernel(const float* f,
                                                 const float* coeffs){
     
     /*
-    Kernel of GPU implementation of 3D backward image warping along the DVF (u,v)
-    with cubic interpolation (rectangular multivariate spline)
+    Kernel of GPU implementation of affine 3D backward image warping along the DVF (u,v,w)
+    with cubic interpolation. The cubic polynomials used are passed by the
+    coeffs parameter. The are computed externally with sage.
     */
 
     int h = blockIdx.z * blockDim.z + threadIdx.z;
@@ -399,8 +405,9 @@ __global__ void adjointAffineCubicBackwardWarp3DKernel(const float* fWarped,
                                                        const float* coeffs){
     
     /*
-    Kernel of GPU implementation of adjoint 3D backward image warping along the
-    DVF (u,v,w) with cubic interpolation (rectangular multivariate catmull-rom spline)
+    Kernel of GPU implementation of affine 3D adjoint backward image warping along the DVF (u,v,w)
+    with cubic interpolation. The cubic polynomials used are passed by the
+    coeffs parameter. The are computed externally with sage.
     */
 
     int h = blockIdx.z * blockDim.z + threadIdx.z;
