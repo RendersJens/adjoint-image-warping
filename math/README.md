@@ -1,0 +1,1 @@
+These sage notebooks show and perform the computation of the polynomials which are used in the cuda kernels.
