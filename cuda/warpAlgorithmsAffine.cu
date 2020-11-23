@@ -203,14 +203,22 @@ void adjointAffineBackwardWarp2D(const float* fWarped,
         gpuErrchk(cudaPeekAtLastError());
         gpuErrchk(cudaDeviceSynchronize());
     }else if(degree==3){
+        float coeffs[] = {
+            #include "cubic_2D_coefficients.inc"
+        };
+        float *d_coeffs;
+        gpuErrchk(cudaMalloc(&d_coeffs, 16*16*sizeof(float)));
+        gpuErrchk(cudaMemcpy(d_coeffs, coeffs, 16*16*sizeof(float), cudaMemcpyHostToDevice));
         adjointAffineCubicBackwardWarp2DKernel<<<numBlocks, threadsPerBlock>>>(d_fWarped,
                                                                                d_A,
                                                                                d_b,
                                                                                d_f,
                                                                                width,
-                                                                               height);
+                                                                               height,
+                                                                               d_coeffs);
         gpuErrchk(cudaPeekAtLastError());
         gpuErrchk(cudaDeviceSynchronize());
+        cudaFree(d_coeffs);
     }else{
         throw "Only degree 1 and 3 are implemented";
     }

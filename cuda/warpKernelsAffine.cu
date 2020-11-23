@@ -271,7 +271,8 @@ __global__ void adjointAffineCubicBackwardWarp2DKernel(const float* fWarped,
                                                        const float* b,
                                                        float* f,
                                                        int width,
-                                                       int height){
+                                                       int height,
+                                                       const float* coeffs){
 
     /*
     Kernel of GPU implementation of adjoint backward image warping along the
@@ -290,16 +291,7 @@ __global__ void adjointAffineCubicBackwardWarp2DKernel(const float* fWarped,
         // points from which to interpolate
         int x1 = floorf(x);
         int y1 = floorf(y);
-        int x0 = x1 - 1;
-        int y0 = y1 - 1;
-        int x2 = x1 + 1;
-        int y2 = y1 + 1;
-        int x3 = x1 + 2;
-        int y3 = y1 + 2;
-        int Q[][2] = {{y0, x0},{y0, x1},{y0, x2},{y0, x3},
-                      {y1, x0},{y1, x1},{y1, x2},{y1, x3},
-                      {y2, x0},{y2, x1},{y2, x2},{y2, x3},
-                      {y3, x0},{y3, x1},{y3, x2},{y3, x3}};
+        // xi = x1 - 1 + i
 
         // interpolation coefficients
         float xmx1 = x - x1;
@@ -308,27 +300,22 @@ __global__ void adjointAffineCubicBackwardWarp2DKernel(const float* fWarped,
         float xmx1_3 = xmx1 * xmx1_2;
         float ymy1_2 = ymy1 * ymy1;
         float ymy1_3 = ymy1 * ymy1_2;
-        float coefficients[] = { 0.25f*xmx1_3*ymy1_3 - 0.5f*xmx1_3*ymy1_2 - 0.5f*xmx1_2*ymy1_3 + 0.25f*xmx1_3*ymy1 + xmx1_2*ymy1_2 + 0.25f*xmx1*ymy1_3 - 0.5f*xmx1_2*ymy1 - 0.5f*xmx1*ymy1_2 + 0.25f*xmx1*ymy1,
-                                -0.75f*xmx1_3*ymy1_3 + 1.5f*xmx1_3*ymy1_2 + 1.25f*xmx1_2*ymy1_3 - 0.75f*xmx1_3*ymy1 - 2.5f*xmx1_2*ymy1_2 + 1.25f*xmx1_2*ymy1 - 0.5f*ymy1_3 + ymy1_2 - 0.5f*ymy1,
-                                 0.75f*xmx1_3*ymy1_3 - 1.5f*xmx1_3*ymy1_2 - xmx1_2*ymy1_3 + 0.75f*xmx1_3*ymy1 + 2*xmx1_2*ymy1_2 - 0.25f*xmx1*ymy1_3 - xmx1_2*ymy1 + 0.5f*xmx1*ymy1_2 - 0.25f*xmx1*ymy1,
-                                -0.25f*xmx1_3*ymy1_3 + 0.5f*xmx1_3*ymy1_2 + 0.25f*xmx1_2*ymy1_3 - 0.25f*xmx1_3*ymy1 - 0.5f*xmx1_2*ymy1_2 + 0.25f*xmx1_2*ymy1,
-                                -0.75f*xmx1_3*ymy1_3 + 1.25f*xmx1_3*ymy1_2 + 1.5f*xmx1_2*ymy1_3 - 2.5f*xmx1_2*ymy1_2 - 0.75f*xmx1*ymy1_3 - 0.5f*xmx1_3 + 1.25f*xmx1*ymy1_2 + xmx1_2 - 0.5f*xmx1,
-                                 2.25f*xmx1_3*ymy1_3 - 3.75f*xmx1_3*ymy1_2 - 3.75f*xmx1_2*ymy1_3 + 6.25f*xmx1_2*ymy1_2 + 1.5f*xmx1_3 + 1.5f*ymy1_3 - 2.5f*xmx1_2 - 2.5f*ymy1_2 + 1,
-                                -2.25f*xmx1_3*ymy1_3 + 3.75f*xmx1_3*ymy1_2 + 3*xmx1_2*ymy1_3 - 5*xmx1_2*ymy1_2 + 0.75f*xmx1*ymy1_3 - 1.5f*xmx1_3 - 1.25f*xmx1*ymy1_2 + 2*xmx1_2 + 0.5f*xmx1,
-                                 0.75f*xmx1_3*ymy1_3 - 1.25f*xmx1_3*ymy1_2 - 0.75f*xmx1_2*ymy1_3 + 1.25f*xmx1_2*ymy1_2 + 0.5f*xmx1_3 - 0.5f*xmx1_2,
-                                 0.75f*xmx1_3*ymy1_3 - xmx1_3*ymy1_2 - 1.5f*xmx1_2*ymy1_3 - 0.25f*xmx1_3*ymy1 + 2*xmx1_2*ymy1_2 + 0.75f*xmx1*ymy1_3 + 0.5f*xmx1_2*ymy1 - xmx1*ymy1_2 - 0.25f*xmx1*ymy1,
-                                -2.25f*xmx1_3*ymy1_3 + 3*xmx1_3*ymy1_2 + 3.75f*xmx1_2*ymy1_3 + 0.75f*xmx1_3*ymy1 - 5*xmx1_2*ymy1_2 - 1.25f*xmx1_2*ymy1 - 1.5f*ymy1_3 + 2*ymy1_2 + 0.5f*ymy1,
-                                 2.25f*xmx1_3*ymy1_3 - 3*xmx1_3*ymy1_2 - 3*xmx1_2*ymy1_3 - 0.75f*xmx1_3*ymy1 + 4*xmx1_2*ymy1_2 - 0.75f*xmx1*ymy1_3 + xmx1_2*ymy1 + xmx1*ymy1_2 + 0.25f*xmx1*ymy1,
-                                -0.75f*xmx1_3*ymy1_3 + xmx1_3*ymy1_2 + 0.75f*xmx1_2*ymy1_3 + 0.25f*xmx1_3*ymy1 - xmx1_2*ymy1_2 - 0.25f*xmx1_2*ymy1,
-                                -0.25f*xmx1_3*ymy1_3 + 0.25f*xmx1_3*ymy1_2 + 0.5f*xmx1_2*ymy1_3 - 0.5f*xmx1_2*ymy1_2 - 0.25f*xmx1*ymy1_3 + 0.25f*xmx1*ymy1_2,
-                                 0.75f*xmx1_3*ymy1_3 - 0.75f*xmx1_3*ymy1_2 - 1.25f*xmx1_2*ymy1_3 + 1.25f*xmx1_2*ymy1_2 + 0.5f*ymy1_3 - 0.5f*ymy1_2,
-                                -0.75f*xmx1_3*ymy1_3 + 0.75f*xmx1_3*ymy1_2 + xmx1_2*ymy1_3 - xmx1_2*ymy1_2 + 0.25f*xmx1*ymy1_3 - 0.25f*xmx1*ymy1_2,
-                                 0.25f*xmx1_3*ymy1_3 - 0.25f*xmx1_3*ymy1_2 - 0.25f*xmx1_2*ymy1_3 + 0.25f*xmx1_2*ymy1_2};
+        float monomials[] = {1, ymy1, ymy1_2, ymy1_3, xmx1, xmx1*ymy1, xmx1*ymy1_2, xmx1*ymy1_3, xmx1_2, xmx1_2*ymy1, xmx1_2*ymy1_2, xmx1_2*ymy1_3, xmx1_3, xmx1_3*ymy1, xmx1_3*ymy1_2, xmx1_3*ymy1_3};
 
-        for(int k = 0; k < 16; k++){
-            if(0 <= Q[k][0] && Q[k][0] < height
-            && 0 <= Q[k][1] && Q[k][1] < width){
-                atomicAdd(&f[Q[k][0]*width + Q[k][1]], coefficients[k] * fWarped[i*width + j]);
+        int k = 0;
+        for(int ii = 0; ii < 4; ii++){
+            for(int jj = 0; jj < 4; jj++){
+                int Q0 = x1 + jj - 1;
+                int Q1 = y1 + ii - 1;
+                if(0 <= Q0 && Q0 < width
+                && 0 <= Q1 && Q1 < height){
+                    float coefficient = 0;
+                    for(int n = 0; n < 16; n++){
+                        coefficient += coeffs[k*16 + n] * monomials[n];
+                    }
+                    atomicAdd(&f[Q1*width + Q0], coefficient * fWarped[i*width + j]);
+                }
+                k++;
             }
         }
     }
