@@ -1,6 +1,8 @@
 These sage notebooks show and perform the computation of the polynomials which are used in the cuda kernels. This is particularily important for the cubic case. This notebook will generate the files
-`cubic_2D_coefficients.inc`
-`cubic_2D_coefficients.inc`
+
+ - `cubic_2D_coefficients.inc`
+ - `cubic_2D_coefficients.inc`
+ 
 which are imported by the respective cuda kernels. Just for reference, the same computations in the linear case are also included, but they can easily be computed by hand. I recommend looking at the cubic case first and using the linear case to compare.
 
 Viewing the notebooks
