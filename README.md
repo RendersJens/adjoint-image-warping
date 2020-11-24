@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/315300340.svg)](https://zenodo.org/badge/latestdoi/315300340)
+
 # Adjoint Image Warping
 GPU accelerated image warping and adjoint image warping algorithms. Written in CUDA C for use in python with the provided wrappers.
 
