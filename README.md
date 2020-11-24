@@ -5,6 +5,8 @@ GPU accelerated image warping and adjoint image warping algorithms. Written in C
 
 Installation
 ------------
+Cython and the CUDA toolkit are required in order to build the code for use in python.
+
 In the root folder of the project:
 `$ python setup.py install`
 
